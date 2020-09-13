@@ -1,3 +1,7 @@
+import com.jlal.pageobjects.GmailHomePage;
+import com.jlal.pageobjects.PasswordSignInPage;
+import com.jlal.pageobjects.UsernameSignInPage;
+import com.jlal.util.WebUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,36 +29,29 @@ public class GmailSignInTest {
     @Test
     public void gmailValidLogin(){
         //1. Go to Gmail url
-        driver.get("https://gmail.com");
-        //2. Enter username
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//input[@autocomplete='username']")));
-        WebElement usernameTextBox = driver.findElement(By.xpath("//input[@autocomplete='username']"));
-        usernameTextBox.clear();
-        usernameTextBox.sendKeys("tuserfortest1@gmail.com");
-        //3. Click next button
-        WebElement usernameNextButton = driver.findElement(By.xpath("//div[@class='VfPpkd-RLmnJb']"));
-        usernameNextButton.click();
-        //4. Enter password
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//input[@autocomplete='current-password']")));
-        WebElement passwordTextBox = driver.findElement(By.xpath("//input[@autocomplete='current-password']"));
-        passwordTextBox.clear();
-        passwordTextBox.sendKeys("$tUserForTest1$");
-        //5. Click next button
-        WebElement passwordNextButton = driver.findElement(By.xpath("//div[@class='VfPpkd-RLmnJb']"));
-        passwordNextButton.click();
-        //6. Verify that user signed in
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//a[contains(@aria-label,'Inbox')]")));
-        Assert.assertTrue("Inbox should exist", driver.findElements(By.xpath("//a[contains(@aria-label,'Inbox')]")).size()>0);
-        //7. Click sign out
-        WebElement profileButton = driver.findElement(By.xpath("//img[@class='gb_La gbii']"));
-        profileButton.click();
+        UsernameSignInPage usernameSignInPage = WebUtil.goToSignInPage(driver);
 
-        WebElement signOutButton = driver.findElement(By.xpath("//a[@id='gb_71']"));
-        signOutButton.click();
+        //2. Enter username
+        usernameSignInPage.enterUsername(driver, "tuserfortest1@gmail.com");
+
+        //3. Click next button
+        PasswordSignInPage passwordSignInPage = usernameSignInPage.clickUsernameNextButton(driver);
+
+        //4. Enter password
+        passwordSignInPage.enterPassword(driver, "$tUserForTest1$");
+
+        //5. Click next button
+        GmailHomePage gmailHomePage = passwordSignInPage.clickPasswordNextButton(driver);
+
+        //6. Verify that user signed in
+        Assert.assertTrue("Inbox should exist", gmailHomePage.isInboxExist(driver));
+
+        //7. Click sign out
+        usernameSignInPage= gmailHomePage.signOut(driver);
+
         //8. Verify that user signed out
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[text()='Signed out']")));
-        Assert.assertTrue("SignedOut button should exist", driver.findElements(By.xpath("//div[text()='Signed out']")).size()>0);
+        Assert.assertTrue("SignedOut button should exist", usernameSignInPage.isSignedOut(driver));
+
     }
     @After
     public void tearDown(){
