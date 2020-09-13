@@ -1,5 +1,6 @@
 package com.jlal.pageobjects;
 
+import com.jlal.util.WebUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,19 +10,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PasswordSignInPage {
     public static void enterPassword(WebDriver driver, String s) {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//input[@autocomplete='current-password']")));
-        WebElement passwordTextBox = driver.findElement(By.xpath("//input[@autocomplete='current-password']"));
-        passwordTextBox.clear();
-        passwordTextBox.sendKeys(s);
+        WebUtil.waitForElementVisibile(driver, By.xpath("//input[@autocomplete='current-password']"));
+
+        WebUtil.clearAndSendKeys(driver, By.xpath("//input[@autocomplete='current-password']"), s);
     }
 
     public static GmailHomePage clickPasswordNextButton(WebDriver driver) {
-        WebElement nextButton = driver.findElement(By.xpath("//div[@class='VfPpkd-RLmnJb']"));
-        nextButton.click();
+        WebUtil.click(driver, By.xpath("//div[@class='VfPpkd-RLmnJb']"));
 
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//a[contains(@aria-label,'Inbox')]")));
+        WebUtil.waitForElementVisibile(driver, By.xpath("//a[contains(@aria-label,'Inbox')]"));
+
         return PageFactory.initElements(driver, GmailHomePage.class);
     }
 }
