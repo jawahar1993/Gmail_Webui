@@ -17,3 +17,8 @@ Windows OS Platform:
   * Chrome driver: https://chromedriver.chromium.org/downloads (Check for browser campatibility)
   
   
+# Test execution
+
+* mvn clean test - To run all test cases
+* mvn -P All clean test - To run all test cases under profile All
+* mvn -P Critical clean test - To run all critical test cases under profile Critical
