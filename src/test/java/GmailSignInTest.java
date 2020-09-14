@@ -1,3 +1,4 @@
+import com.jlal.categories.Critical;
 import com.jlal.pageobjects.GmailHomePage;
 import com.jlal.pageobjects.PasswordSignInPage;
 import com.jlal.pageobjects.UsernameSignInPage;
@@ -6,6 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,7 +27,7 @@ public class GmailSignInTest {
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\Thoughtpooladmin\\Downloads\\chromedriver_win32\\chromedriver.exe");
         driver = new ChromeDriver();
     }
-
+    @Category({Critical.class})
     @Test
     public void gmailValidLogin(){
         //1. Go to Gmail url
